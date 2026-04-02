@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4ルートの承認ステップ詳細</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic Medium", "Meiryo", sans-serif;
+    font-size: 13px;
+    color: #2D3748;
+    background: #F7F8FA;
+    padding: 20px;
+  }
+
+  :root {
+    --teal:     #0D7A6E;
+    --teal-lt:  #E1F5EE;
+    --teal-dk:  #085041;
+    --blue:     #185FA5;
+    --blue-lt:  #E6F1FB;
+    --blue-dk:  #0C447C;
+    --amber:    #9A5200;
+    --amber-lt: #FEF3E2;
+    --amber-dk: #633806;
+    --coral:    #8B3120;
+    --coral-lt: #FAECE7;
+    --coral-dk: #712B13;
+    --border:   #E2E8F0;
+    --text-primary:   #2D3748;
+    --text-secondary: #718096;
+    --bg-secondary:   #F7F8FA;
+  }
+
+  .wrap { padding: 0 0 8px; }
+
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+    font-size: 12px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-secondary);
+  }
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .col {
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1.5px solid var(--border);
+    background: #fff;
+  }
+
+  .col-head {
+    padding: 10px 12px;
+    text-align: center;
+    color: #fff;
+  }
+  .col-head .route {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+  .col-head .cond {
+    font-size: 10px;
+    opacity: .88;
+    line-height: 1.4;
+  }
+
+  .steps { padding: 10px 10px 4px; }
+
+  .step {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    align-items: flex-start;
+  }
+  .step-num {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 500;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .step-body { flex: 1; }
+  .step-title {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.4;
+    margin-bottom: 2px;
+  }
+  .step-desc {
+    font-size: 11px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .step-connector {
+    width: 1px;
+    height: 10px;
+    margin: 0 0 0 9px;
+    opacity: .3;
+  }
+
+  .badge {
+    display: inline-block;
+    font-size: 9px;
+    padding: 1px 6px;
+    border-radius: 10px;
+    margin-top: 3px;
+    font-weight: 500;
+  }
+
+  .note-box {
+    margin: 4px 0 10px;
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 10px;
+    line-height: 1.5;
+  }
+
+  .end-badge {
+    text-align: center;
+    padding: 8px 10px 10px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  /* ── ルートA-1（teal）─────────────────── */
+  .col-a1 .col-head    { background: var(--teal); }
+  .col-a1 .step-num    { background: var(--teal-lt); color: var(--teal-dk); }
+  .col-a1 .step-connector { background: var(--teal); }
+  .col-a1 .badge       { background: var(--teal-lt); color: var(--teal-dk); }
+  .col-a1 .note-box    { background: var(--teal-lt); color: var(--teal-dk); border-left: 3px solid var(--teal); }
+  .col-a1 .end-badge   { color: var(--teal-dk); }
+
+  /* ── ルートA-2（blue）─────────────────── */
+  .col-a2 .col-head    { background: var(--blue); }
+  .col-a2 .step-num    { background: var(--blue-lt); color: var(--blue-dk); }
+  .col-a2 .step-connector { background: var(--blue); }
+  .col-a2 .badge       { background: var(--blue-lt); color: var(--blue-dk); }
+  .col-a2 .note-box    { background: var(--blue-lt); color: var(--blue-dk); border-left: 3px solid var(--blue); }
+  .col-a2 .end-badge   { color: var(--blue-dk); }
+
+  /* ── ルートB（amber）──────────────────── */
+  .col-b .col-head     { background: var(--amber); }
+  .col-b .step-num     { background: var(--amber-lt); color: var(--amber-dk); }
+  .col-b .step-connector { background: var(--amber); }
+  .col-b .badge        { background: var(--amber-lt); color: var(--amber-dk); }
+  .col-b .note-box     { background: var(--amber-lt); color: var(--amber-dk); border-left: 3px solid var(--amber); }
+  .col-b .end-badge    { color: var(--amber-dk); }
+
+  /* ── ルートC（coral）──────────────────── */
+  .col-c .col-head     { background: var(--coral); }
+  .col-c .step-num     { background: var(--coral-lt); color: var(--coral-dk); }
+  .col-c .step-connector { background: var(--coral); }
+  .col-c .badge        { background: var(--coral-lt); color: var(--coral-dk); }
+  .col-c .note-box     { background: var(--coral-lt); color: var(--coral-dk); border-left: 3px solid var(--coral); }
+  .col-c .end-badge    { color: var(--coral-dk); }
+
+  /* ── レスポンシブ対応 ─────────────────── */
+  @media (max-width: 800px) {
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 480px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-dot" style="background:var(--teal)"></div>
+      ルートA-1：立替払い後に現金精算
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:var(--blue)"></div>
+      ルートA-2：先払い申請→証憑を後提出
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:var(--amber)"></div>
+      ルートB：高額・学園が直接振込（2段階）
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:var(--coral)"></div>
+      ルートC：予算外・学園が直接振込（3段階）
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <!-- ルートA-1 -->
+    <div class="col col-a1">
+      <div class="col-head">
+        <div class="route">ルートA-1</div>
+        <div class="cond">予算内・少額<br>立替払い → 現金精算</div>
+      </div>
+      <div class="steps">
+        <div class="note-box">使用者がいったん自費で支払い、後日事務室の窓口で現金を受け取る</div>
+
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">立替払い・領収書を保管</div>
+            <div class="step-desc">使用者が自費で購入し、領収書を保管する</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">事務室の窓口に来訪</div>
+            <div class="step-desc">領収書を持参して事務室へ</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">事務担当がKintoneに入力</div>
+            <div class="step-desc">精算内容・金額・領収書画像を登録し「会計確認待ち」に提出</div>
+            <div class="badge">Kintone</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-title">会計事務担当が承認</div>
+            <div class="step-desc">Garoon通知を確認しKintoneで承認または差し戻し</div>
+            <div class="badge">Garoon → Kintone</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <div class="step-title">現金を手渡し・記録確定</div>
+            <div class="step-desc">承認後、事務担当が現金を渡し「支払済」に更新</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-body">
+            <div class="step-title">弥生会計へ記帳</div>
+            <div class="step-desc">KintoneからCSV出力し弥生にインポート</div>
+            <div class="badge">弥生会計</div>
+          </div>
+        </div>
+
+        <div class="end-badge">精算完了</div>
+      </div>
+    </div>
+
+    <!-- ルートA-2 -->
+    <div class="col col-a2">
+      <div class="col-head">
+        <div class="route">ルートA-2</div>
+        <div class="cond">予算内・少額<br>先に申請 → 現金受取 → 証憑を後提出</div>
+      </div>
+      <div class="steps">
+        <div class="note-box">立替払いは不要。先に申請して現金を受け取り、後日領収書を提出する</div>
+
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Garoonから申請フォームに入力</div>
+            <div class="step-desc">費目・金額・使用目的を入力して送信（証憑はまだ不要）</div>
+            <div class="badge">Garoon</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">会計事務担当が承認</div>
+            <div class="step-desc">Garoon通知を確認しKintoneで承認または差し戻し</div>
+            <div class="badge">Garoon → Kintone</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">事務室の窓口で現金を受取</div>
+            <div class="step-desc">承認済み通知を確認のうえ事務担当から現金を受け取る</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-title">領収書を事後提出</div>
+            <div class="step-desc">購入後、領収書を持参またはGaroon経由で画像を添付・提出</div>
+            <div class="badge">期限内に提出</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <div class="step-title">証憑確認・記録確定</div>
+            <div class="step-desc">会計事務担当が領収書を確認しKintoneのステータスを完了に更新</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-body">
+            <div class="step-title">弥生会計へ記帳</div>
+            <div class="step-desc">KintoneからCSV出力し弥生にインポート</div>
+            <div class="badge">弥生会計</div>
+          </div>
+        </div>
+
+        <div class="end-badge">精算完了</div>
+      </div>
+    </div>
+
+    <!-- ルートB -->
+    <div class="col col-b">
+      <div class="col-head">
+        <div class="route">ルートB</div>
+        <div class="cond">予算内・設定金額超<br>学園が支払先に直接振込（2段階）</div>
+      </div>
+      <div class="steps">
+        <div class="note-box">金額が大きいため学園が直接支払先へ振込。申請者への現金支払いはなし</div>
+
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Garoonから申請フォームに入力</div>
+            <div class="step-desc">費目・金額・支払先・証憑（見積書等）を添付して送信</div>
+            <div class="badge">Garoon</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">会計事務担当が一次承認</div>
+            <div class="step-desc">内容確認・予算照合後にKintoneで承認</div>
+            <div class="badge">Garoon → Kintone</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">財務管理チームが二次承認</div>
+            <div class="step-desc">妥当性・予算残高を確認してKintoneで最終承認</div>
+            <div class="badge">Kintone</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-title">学園が支払先へ直接振込</div>
+            <div class="step-desc">承認完了後、会計事務担当が支払先に振込処理を実行</div>
+            <div class="badge">学園→支払先</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <div class="step-title">申請者へ完了通知</div>
+            <div class="step-desc">Garoonの通知で振込完了を申請者に連絡</div>
+            <div class="badge">Garoon</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-body">
+            <div class="step-title">弥生会計へ記帳</div>
+            <div class="step-desc">KintoneからCSV出力し弥生にインポート</div>
+            <div class="badge">弥生会計</div>
+          </div>
+        </div>
+
+        <div class="end-badge">支払完了</div>
+      </div>
+    </div>
+
+    <!-- ルートC -->
+    <div class="col col-c">
+      <div class="col-head">
+        <div class="route">ルートC</div>
+        <div class="cond">予算外<br>学園が支払先に直接振込（3段階）</div>
+      </div>
+      <div class="steps">
+        <div class="note-box">予算外のため理事会・全体会まで承認が必要。申請者への現金支払いはなし</div>
+
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Garoonから申請フォームに入力</div>
+            <div class="step-desc">費目・金額・支払先・予算外理由・証憑を添付して送信</div>
+            <div class="badge">Garoon</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">財務管理チームが一次承認</div>
+            <div class="step-desc">妥当性・必要性を確認してKintoneで承認</div>
+            <div class="badge">Kintone</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">理事会が二次承認</div>
+            <div class="step-desc">方針判断のうえKintoneで承認</div>
+            <div class="badge">Kintone</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-title">全体会が最終承認</div>
+            <div class="step-desc">全体会でKintoneの最終承認を実行</div>
+            <div class="badge">Kintone</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <div class="step-title">学園が支払先へ直接振込</div>
+            <div class="step-desc">全承認完了後、会計事務担当が振込処理を実行</div>
+            <div class="badge">学園→支払先</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-body">
+            <div class="step-title">弥生会計へ記帳</div>
+            <div class="step-desc">KintoneからCSV出力し弥生にインポート</div>
+            <div class="badge">弥生会計</div>
+          </div>
+        </div>
+
+        <div class="end-badge">支払完了</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

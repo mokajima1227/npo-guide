@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>予算チェック用アプリ設計仕様</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic Medium", "Meiryo", sans-serif;
+    font-size: 13px;
+    color: #2D3748;
+    background: #F7F8FA;
+    padding: 24px;
+    line-height: 1.6;
+  }
+  h1 { font-size: 18px; font-weight: 500; color: #1B2B4B; margin-bottom: 4px; }
+  .subtitle { font-size: 12px; color: #718096; margin-bottom: 20px; }
+
+  .app-block {
+    background: #fff;
+    border: 0.5px solid #E2E8F0;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .app-head {
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .app-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 500;
+    flex-shrink: 0;
+    color: #fff;
+  }
+  .app-title { font-size: 14px; font-weight: 500; }
+  .app-sub {
+    font-size: 11px;
+    margin-left: auto;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12px; table-layout: fixed; }
+  th {
+    background: #F1F5F9;
+    padding: 6px 10px;
+    border-bottom: 1px solid #E2E8F0;
+    text-align: left;
+    font-weight: 500;
+    color: #718096;
+  }
+  td {
+    padding: 7px 10px;
+    border-bottom: 1px solid #F1F5F9;
+    vertical-align: top;
+    word-break: break-all;
+    color: #2D3748;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #FAFAFA; }
+
+  .tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+  .t-key  { background: #EEEDFE; color: #3C3489; }
+  .t-auto { background: #EAF3DE; color: #27500A; }
+  .t-req  { background: #FCEBEB; color: #791F1F; }
+  .t-js   { background: #FAEEDA; color: #633806; }
+
+  .note {
+    background: #F8FAFC;
+    padding: 8px 14px;
+    font-size: 11px;
+    color: #718096;
+    border-top: 1px solid #E2E8F0;
+    line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+
+<h1>予算チェック用アプリ設計仕様</h1>
+<p class="subtitle">Kintoneで経費申請時の予算内外チェックを自動化するために必要な3つのアプリ設定</p>
+
+<!-- ① 予算マスタアプリ -->
+<div class="app-block">
+  <div class="app-head" style="background:#EEEDFE">
+    <div class="app-num" style="background:#534AB7">1</div>
+    <div class="app-title" style="color:#26215C">予算マスタアプリ</div>
+    <div class="app-sub" style="background:#534AB7;color:#fff">会計事務担当が年度初めに登録・更新</div>
+  </div>
+  <table>
+    <colgroup>
+      <col style="width:22%"><col style="width:18%"><col style="width:10%"><col>
+    </colgroup>
+    <tr>
+      <th>フィールド名</th>
+      <th>種別</th>
+      <th>属性</th>
+      <th>内容・設定ポイント</th>
+    </tr>
+    <tr>
+      <td>予算コード</td>
+      <td>文字列（1行）</td>
+      <td><span class="tag t-key">キー</span></td>
+      <td>例：「2025-消耗品費-3A」。年度＋費目＋クラス/部門を組み合わせると一意になる。経費申請アプリからルックアップで参照する元になる</td>
+    </tr>
+    <tr>
+      <td>費目名</td>
+      <td>ドロップダウン</td>
+      <td><span class="tag t-req">必須</span></td>
+      <td>消耗品費・交通費・通信費・会議費・研修費・その他。経費申請の費目と対応させる</td>
+    </tr>
+    <tr>
+      <td>対象クラス/部門</td>
+      <td>文字列（1行）</td>
+      <td><span class="tag t-req">必須</span></td>
+      <td>3年A組・事務局など。申請者の所属と紐付けてルックアップ絞り込みに使う</td>
+    </tr>
+    <tr>
+      <td>年度</td>
+      <td>文字列（1行）</td>
+      <td><span class="tag t-req">必須</span></td>
+      <td>「2025」など4桁。翌年度は新規レコードとして追加する運用</td>
+    </tr>
+    <tr>
+      <td>年度予算額</td>
+      <td>数値</td>
+      <td><span class="tag t-req">必須</span></td>
+      <td>単位：円。理事会承認済みの予算額を登録する</td>
+    </tr>
+    <tr>
+      <td>少額設定金額</td>
+      <td>数値</td>
+      <td><span class="tag t-req">必須</span></td>
+      <td>ルートA/Bの振り分け閾値（例：30,000円）。費目・部門ごとに変えることも可能</td>
+    </tr>
+    <tr>
+      <td>承認済み合計額</td>
+      <td>数値</td>
+      <td><span class="tag t-auto">自動</span></td>
+      <td>申請実績集計アプリからルックアップで取得、またはJavaScriptで集計。直接入力は不可</td>
+    </tr>
+    <tr>
+      <td>予算残額</td>
+      <td>計算式</td>
+      <td><span class="tag t-auto">自動</span></td>
+      <td>年度予算額 − 承認済み合計額。経費申請アプリ側に表示される</td>
+    </tr>
+    <tr>
+      <td>予算消化率</td>
+      <td>計算式</td>
+      <td><span class="tag t-auto">自動</span></td>
+      <td>承認済み合計額 ÷ 年度予算額 × 100（%表示）。管理画面での把握用</td>
+    </tr>
+  </table>
+  <div class="note">
+    1レコード＝「年度×費目×クラス/部門」の組み合わせ。例：2025年度の3年A組の消耗品費は1行で管理する。年度をまたぐ場合は翌年度に新しいレコードを作成する。
+  </div>
+</div>
+
+<!-- ② 申請実績集計アプリ -->
+<div class="app-block">
+  <div class="app-head" style="background:#FAEEDA">
+    <div class="app-num" style="background:#854F0B">2</div>
+    <div class="app-title" style="color:#412402">申請実績集計アプリ（集計ビュー）</div>
+    <div class="app-sub" style="background:#854F0B;color:#fff">新規アプリ不要・経費申請アプリの集計ビューで代用可</div>
+  </div>
+  <table>
+    <colgroup>
+      <col style="width:22%"><col style="width:18%"><col style="width:10%"><col>
+    </colgroup>
+    <tr>
+      <th>設定内容</th>
+      <th>Kintone機能</th>
+      <th>属性</th>
+      <th>設定ポイント</th>
+    </tr>
+    <tr>
+      <td>承認済みレコードの合計</td>
+      <td>集計ビュー</td>
+      <td><span class="tag t-auto">自動</span></td>
+      <td>経費申請アプリに「集計ビュー」を追加し、グループ化キー＝予算コード・集計フィールド＝金額（税込）・条件＝ステータスが「承認済み以降」に設定する</td>
+    </tr>
+    <tr>
+      <td>予算コード別残額確認</td>
+      <td>集計ビュー</td>
+      <td><span class="tag t-auto">自動</span></td>
+      <td>同じ集計ビューに「予算残額」列を追加（予算マスタとの差分を表示）。会計事務担当がダッシュボード代わりに使う</td>
+    </tr>
+    <tr>
+      <td>月次累計推移</td>
+      <td>グラフビュー</td>
+      <td><span class="tag t-auto">自動</span></td>
+      <td>月ごとの累計承認額を棒グラフ表示。予算消化ペースの確認用</td>
+    </tr>
+  </table>
+  <div class="note">
+    専用の「実績集計アプリ」を新たに作らなくても、経費申請アプリの集計ビュー機能で代用できる。ただし予算マスタアプリの「承認済み合計額」フィールドをリアルタイムに更新したい場合はJavaScriptカスタマイズが必要になる。
+  </div>
+</div>
+
+<!-- ③ 経費申請アプリへの追加設定 -->
+<div class="app-block">
+  <div class="app-head" style="background:#E1F5EE">
+    <div class="app-num" style="background:#0D7A6E">3</div>
+    <div class="app-title" style="color:#04342C">経費申請アプリへの追加設定</div>
+    <div class="app-sub" style="background:#0D7A6E;color:#fff">既存アプリに以下のフィールドと仕掛けを追加する</div>
+  </div>
+  <table>
+    <colgroup>
+      <col style="width:22%"><col style="width:18%"><col style="width:10%"><col>
+    </colgroup>
+    <tr>
+      <th>追加フィールド/設定</th>
+      <th>種別</th>
+      <th>属性</th>
+      <th>設定ポイント</th>
+    </tr>
+    <tr>
+      <td>予算コード（選択）</td>
+      <td>ルックアップ</td>
+      <td><span class="tag t-req">必須</span></td>
+      <td>予算マスタアプリをルックアップ先に設定。費目・所属で絞り込み表示することで選び間違いを防ぐ</td>
+    </tr>
+    <tr>
+      <td>予算残額（表示）</td>
+      <td>ルックアップ</td>
+      <td><span class="tag t-auto">自動</span></td>
+      <td>予算コードを選択した瞬間に予算マスタから残額を自動取得・表示。申請者が残額を見ながら申請できる</td>
+    </tr>
+    <tr>
+      <td>少額設定金額（表示）</td>
+      <td>ルックアップ</td>
+      <td><span class="tag t-auto">自動</span></td>
+      <td>予算コード選択と同時に取得。申請金額との比較でルートA/Bの判定に使う</td>
+    </tr>
+    <tr>
+      <td>予算内外フラグ</td>
+      <td>ラジオボタン/計算</td>
+      <td><span class="tag t-js">JS</span></td>
+      <td>申請金額 ≦ 予算残額なら「予算内」、超えたら「予算外」と自動セット。プロセス管理のルート振り分け条件として使う</td>
+    </tr>
+    <tr>
+      <td>承認ルート</td>
+      <td>文字列（1行）</td>
+      <td><span class="tag t-js">JS</span></td>
+      <td>予算内外フラグ×申請金額×少額設定金額の3条件でA-1/A-2/B/Cを自動セット。Garoonワークフローへの振り分けに使う</td>
+    </tr>
+    <tr>
+      <td>予算超過警告</td>
+      <td>計算式/JS</td>
+      <td><span class="tag t-js">JS</span></td>
+      <td>申請金額が予算残額を超えた場合にフォーム上に警告メッセージを表示。申請を止めるのではなく「予算外申請になります」と案内する形が運用しやすい</td>
+    </tr>
+  </table>
+  <div class="note">
+    JavaScriptカスタマイズ（JS）の箇所はKintoneのカスタマイズ機能で実装する。コードの記述が必要だが、ChatGPTやClaudeにKintone JavaScriptの仕様を伝えてコードを生成してもらうことができる。
+  </div>
+</div>
+
+</body>
+</html>
