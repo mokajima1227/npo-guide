@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>寄附件数カウント 完全ガイド｜認定NPO法人</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap');
+
+:root {
+  --navy:      #1b3d6e;
+  --navy2:     #2a5590;
+  --accent:    #0e9de8;
+  --ok:        #0e8c5f;
+  --ok-bg:     #e6f7f1;
+  --ok-border: #82d4b0;
+  --ng:        #c0392b;
+  --ng-bg:     #fdf0ee;
+  --ng-border: #f0a59e;
+  --warn:      #d4820e;
+  --warn-bg:   #fef9ec;
+  --warn-border:#f5d38a;
+  --next-bg:   #f0f4f9;
+  --next-border:#c0ccdb;
+  --surface:   #ffffff;
+  --bg:        #f2f5f9;
+  --border:    #dde3ed;
+  --text:      #1e2d3e;
+  --muted:     #657586;
+  --light:     #f7f9fc;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.75;
+  font-size: 14px;
+}
+
+/* ── Layout ── */
+.wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 16px 64px;
+}
+
+/* ── Header ── */
+.hero {
+  background: linear-gradient(140deg, var(--navy) 0%, var(--navy2) 60%, #1a6fa8 100%);
+  border-radius: 18px 18px 0 0;
+  padding: 44px 48px 36px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 240px; height: 240px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -80px; right: 80px;
+  width: 180px; height: 180px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+}
+.hero-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.92);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  padding: 4px 12px;
+  border-radius: 30px;
+  margin-bottom: 14px;
+}
+.hero h1 {
+  color: white;
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 0.01em;
+  line-height: 1.25;
+  margin-bottom: 10px;
+}
+.hero-sub {
+  color: rgba(255,255,255,0.72);
+  font-size: 13px;
+}
+
+/* ── Nav tabs ── */
+.nav-tabs {
+  display: flex;
+  background: var(--navy);
+  border-radius: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nav-tabs::-webkit-scrollbar { display: none; }
+.nav-tab {
+  flex: 1;
+  min-width: 120px;
+  padding: 12px 16px;
+  text-align: center;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+  white-space: nowrap;
+}
+.nav-tab:hover {
+  color: rgba(255,255,255,0.9);
+  border-bottom-color: rgba(255,255,255,0.3);
+}
+
+/* ── Card shell ── */
+.card {
+  background: var(--surface);
+  border-radius: 0 0 18px 18px;
+  box-shadow: 0 6px 40px rgba(27,61,110,0.10);
+  overflow: hidden;
+}
+
+/* ── Section ── */
+.section {
+  padding: 36px 44px;
+  border-bottom: 1px solid var(--border);
+}
+.section:last-child { border-bottom: none; }
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.section-num {
+  width: 32px; height: 32px;
+  background: var(--navy);
+  color: white;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: 0.02em;
+}
+
+/* ── Intro callout ── */
+.callout {
+  background: var(--light);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 10px 10px 0;
+  padding: 14px 18px;
+  font-size: 13.5px;
+  margin-bottom: 28px;
+  color: var(--text);
+}
+.callout strong { color: var(--navy); }
+
+/* ── Flow ── */
+.flow-list { display: flex; flex-direction: column; }
+
+.flow-item {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  position: relative;
+}
+.flow-item:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 23px; top: 52px;
+  width: 2px;
+  height: calc(100% - 20px);
+  background: var(--border);
+  z-index: 0;
+}
+.flow-dot {
+  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+}
+.dot-circle {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: var(--navy);
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+.flow-body { padding: 14px 0 22px 8px; }
+.flow-q {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 12px;
+}
+.flow-answers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.ans {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 12.5px;
+  min-width: 190px;
+  flex: 1;
+  line-height: 1.5;
+}
+.ans.ok    { background: var(--ok-bg);   border: 1px solid var(--ok-border); }
+.ans.ng    { background: var(--ng-bg);   border: 1px solid var(--ng-border); }
+.ans.next  { background: var(--next-bg); border: 1px solid var(--next-border); }
+.ans.merge { background: var(--warn-bg); border: 1px solid var(--warn-border); }
+.ans-badge {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 2px 7px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.ans.ok    .ans-badge { background: var(--ok);   color: white; }
+.ans.ng    .ans-badge { background: var(--ng);   color: white; }
+.ans.next  .ans-badge { background: #7e92a8;     color: white; }
+.ans.merge .ans-badge { background: var(--warn); color: white; }
+
+/* ── Quick table ── */
+.qt-wrap { overflow-x: auto; }
+table.qt {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+table.qt thead tr {
+  background: var(--navy);
+  color: white;
+}
+table.qt thead th {
+  padding: 11px 14px;
+  font-weight: 600;
+  font-size: 12.5px;
+  letter-spacing: 0.03em;
+  text-align: left;
+}
+table.qt thead th.center { text-align: center; }
+table.qt tbody tr:nth-child(odd)  { background: white; }
+table.qt tbody tr:nth-child(even) { background: var(--light); }
+table.qt tbody tr:hover { background: #e8f3fc; transition: background .15s; }
+table.qt td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+table.qt td.center { text-align: center; }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+.badge.ok { background: var(--ok-bg); color: var(--ok); border: 1px solid var(--ok-border); }
+.badge.ng { background: var(--ng-bg); color: var(--ng); border: 1px solid var(--ng-border); }
+.reason { font-size: 12px; color: var(--muted); }
+
+/* ── NG list ── */
+.ng-list { display: flex; flex-direction: column; gap: 12px; }
+.ng-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  background: var(--ng-bg);
+  border: 1px solid var(--ng-border);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.ng-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  line-height: 1.4;
+}
+.ng-item-title { font-size: 13.5px; font-weight: 700; color: var(--ng); margin-bottom: 4px; }
+.ng-item-body  { font-size: 12.5px; color: #5a3030; line-height: 1.6; }
+.ng-item-body code {
+  background: rgba(192,57,43,0.1);
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-family: monospace;
+  font-size: 12px;
+}
+
+/* ── Tips grid ── */
+.tips-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.tip-card {
+  background: var(--light);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+.tip-card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 7px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.tip-card-title::before {
+  content: '';
+  width: 4px; height: 16px;
+  background: var(--accent);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.tip-card-body { font-size: 12.5px; color: #4a5c6a; line-height: 1.7; }
+
+/* ── Seikei section ── */
+.seikei-box {
+  background: var(--warn-bg);
+  border: 1px solid var(--warn-border);
+  border-radius: 12px;
+  padding: 20px 22px;
+  margin-bottom: 20px;
+}
+.seikei-box-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--warn);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.seikei-box-body { font-size: 13px; color: #5a4010; line-height: 1.7; }
+
+.seikei-table-wrap { overflow-x: auto; margin-bottom: 20px; }
+table.seikei {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+table.seikei thead tr { background: var(--navy2); color: white; }
+table.seikei thead th {
+  padding: 10px 14px;
+  font-weight: 600;
+  font-size: 12.5px;
+  text-align: left;
+}
+table.seikei thead th.center { text-align: center; }
+table.seikei tbody tr:nth-child(odd)  { background: white; }
+table.seikei tbody tr:nth-child(even) { background: var(--light); }
+table.seikei td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+  font-size: 13px;
+}
+table.seikei td.center { text-align: center; }
+
+.timing-box {
+  background: var(--light);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+}
+.timing-box-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 10px;
+}
+.timing-examples { display: flex; flex-direction: column; gap: 8px; }
+.timing-ex {
+  display: flex;
+  gap: 10px;
+  font-size: 12.5px;
+  align-items: flex-start;
+}
+.timing-ex .label {
+  flex-shrink: 0;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+}
+.timing-ex .label.ok { background: var(--ok-bg); color: var(--ok); border: 1px solid var(--ok-border); }
+.timing-ex .label.ng { background: var(--ng-bg); color: var(--ng); border: 1px solid var(--ng-border); }
+.timing-ex .desc { color: var(--text); line-height: 1.6; }
+
+/* ── Footer ── */
+.foot {
+  background: var(--light);
+  border-top: 1px solid var(--border);
+  padding: 14px 44px;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .hero { padding: 30px 20px 24px; }
+  .hero h1 { font-size: 20px; }
+  .section { padding: 28px 20px; }
+  .foot { padding: 14px 20px; }
+  .tips-grid { grid-template-columns: 1fr; }
+  .flow-answers { flex-direction: column; }
+  .ans { min-width: unset; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="card">
+
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <div class="hero-chip">認定NPO法人 ／ PST 絶対値基準</div>
+  <h1>寄附件数カウント 完全ガイド</h1>
+  <p class="hero-sub">「年間3,000円以上の寄附者が年平均100人以上（5年間で500人以上）」の要件に対応</p>
+</div>
+
+<!-- ===== NAV ===== -->
+<nav class="nav-tabs">
+  <a href="#flow"   class="nav-tab">① 判定フロー</a>
+  <a href="#table"  class="nav-tab">② ケース別一覧</a>
+  <a href="#ng"     class="nav-tab">③ カウント不可の詳細</a>
+  <a href="#tips"   class="nav-tab">④ 実務ポイント</a>
+  <a href="#seikei" class="nav-tab">⑤ 生計を一にする者</a>
+</nav>
+
+<!-- ===== SECTION 1: FLOW ===== -->
+<div class="section" id="flow">
+  <div class="section-label">
+    <div class="section-num">1</div>
+    <div class="section-title">判定フロー</div>
+  </div>
+
+  <div class="callout">
+    寄附を受けたら、以下の4ステップを順番に確認してください。<br>
+    どこかで<strong>NO（カウント不可）</strong>になった時点で終了です。
+  </div>
+
+  <div class="flow-list">
+
+    <div class="flow-item">
+      <div class="flow-dot"><div class="dot-circle">①</div></div>
+      <div class="flow-body">
+        <div class="flow-q">氏名・住所が両方明らかか？</div>
+        <div class="flow-answers">
+          <div class="ans next">
+            <span class="ans-badge">YES</span>
+            <span>次のステップへ進む</span>
+          </div>
+          <div class="ans ng">
+            <span class="ans-badge">NO</span>
+            <span>❌ カウント不可<br>（匿名・住所不明）</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-item">
+      <div class="flow-dot"><div class="dot-circle">②</div></div>
+      <div class="flow-body">
+        <div class="flow-q">寄附した時点で、法人の役員（理事・監事）か？<br>または役員と「生計を一にする者」か？</div>
+        <div class="flow-answers">
+          <div class="ans ng">
+            <span class="ans-badge">YES</span>
+            <span>❌ カウント不可<br>（役員・役員家族等）</span>
+          </div>
+          <div class="ans next">
+            <span class="ans-badge">NO</span>
+            <span>次のステップへ進む</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-item">
+      <div class="flow-dot"><div class="dot-circle">③</div></div>
+      <div class="flow-body">
+        <div class="flow-q">同じ年度に「生計を一にする者」も寄附しているか？<br><small style="font-weight:400;color:var(--muted)">（同居家族・仕送り家族など）</small></div>
+        <div class="flow-answers">
+          <div class="ans merge">
+            <span class="ans-badge">YES</span>
+            <span>全員の寄附額を合算し、<br>まとめて1人分として扱う</span>
+          </div>
+          <div class="ans next">
+            <span class="ans-badge">NO</span>
+            <span>次のステップへ進む</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-item">
+      <div class="flow-dot"><div class="dot-circle">④</div></div>
+      <div class="flow-body">
+        <div class="flow-q">その年度の寄附合計（合算後）が 3,000円以上か？</div>
+        <div class="flow-answers">
+          <div class="ans ok">
+            <span class="ans-badge">YES</span>
+            <span>✅ 1人としてカウント！</span>
+          </div>
+          <div class="ans ng">
+            <span class="ans-badge">NO</span>
+            <span>❌ カウント不可<br>（3,000円未満）</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /section 1 -->
+
+<!-- ===== SECTION 2: TABLE ===== -->
+<div class="section" id="table">
+  <div class="section-label">
+    <div class="section-num">2</div>
+    <div class="section-title">ケース別 カウント可否一覧</div>
+  </div>
+  <div class="qt-wrap">
+    <table class="qt">
+      <thead>
+        <tr>
+          <th>ケース</th>
+          <th class="center" style="width:80px">カウント</th>
+          <th style="width:200px">理由</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>氏名・住所が明確な一般市民が3,000円寄附</td>
+          <td class="center"><span class="badge ok">✅ 1人</span></td>
+          <td class="reason">全条件クリア</td>
+        </tr>
+        <tr>
+          <td>氏名はわかるが住所不明で3,000円寄附</td>
+          <td class="center"><span class="badge ng">❌</span></td>
+          <td class="reason">住所が不明</td>
+        </tr>
+        <tr>
+          <td>口座振込・名前のみ（住所不明）</td>
+          <td class="center"><span class="badge ng">❌</span></td>
+          <td class="reason">住所が不明</td>
+        </tr>
+        <tr>
+          <td>理事が3,000円寄附</td>
+          <td class="center"><span class="badge ng">❌</span></td>
+          <td class="reason">役員本人</td>
+        </tr>
+        <tr>
+          <td>監事の配偶者が3,000円寄附</td>
+          <td class="center"><span class="badge ng">❌</span></td>
+          <td class="reason">役員と生計を一にする者</td>
+        </tr>
+        <tr>
+          <td>職員（スタッフ）が3,000円寄附</td>
+          <td class="center"><span class="badge ok">✅ 1人</span></td>
+          <td class="reason">役員ではない</td>
+        </tr>
+        <tr>
+          <td>同居の夫婦が各1,500円ずつ寄附</td>
+          <td class="center"><span class="badge ok">✅ 1人</span></td>
+          <td class="reason">合算3,000円で1人分</td>
+        </tr>
+        <tr>
+          <td>同居の夫婦が各500円ずつ寄附</td>
+          <td class="center"><span class="badge ng">❌</span></td>
+          <td class="reason">合算1,000円で3,000円未満</td>
+        </tr>
+        <tr>
+          <td>別居の親子（仕送りあり）が各2,000円ずつ寄附</td>
+          <td class="center"><span class="badge ok">✅ 1人</span></td>
+          <td class="reason">生計を一にする＝合算4,000円で1人分</td>
+        </tr>
+        <tr>
+          <td>別居の友人どうしが各3,000円ずつ寄附</td>
+          <td class="center"><span class="badge ok">✅ 2人</span></td>
+          <td class="reason">別世帯なので別々にカウント</td>
+        </tr>
+        <tr>
+          <td>賛助会費3,000円（対価なし）</td>
+          <td class="center"><span class="badge ok">✅ 1人</span></td>
+          <td class="reason">実質寄附とみなせる</td>
+        </tr>
+        <tr>
+          <td>正会員の年会費3,000円</td>
+          <td class="center"><span class="badge ng">❌</span></td>
+          <td class="reason">会費は寄附に該当しない</td>
+        </tr>
+        <tr>
+          <td>民間助成財団からの助成金（対価なし）</td>
+          <td class="center"><span class="badge ok">✅ 1人</span></td>
+          <td class="reason">寄附とみなせる</td>
+        </tr>
+        <tr>
+          <td>国・自治体からの補助金・委託費</td>
+          <td class="center"><span class="badge ng">❌</span></td>
+          <td class="reason">寄附に該当しない</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div><!-- /section 2 -->
+
+<!-- ===== SECTION 3: NG details ===== -->
+<div class="section" id="ng">
+  <div class="section-label">
+    <div class="section-num">3</div>
+    <div class="section-title">カウントされない場合の詳細</div>
+  </div>
+  <div class="ng-list">
+
+    <div class="ng-item">
+      <div class="ng-icon">📭</div>
+      <div>
+        <div class="ng-item-title">氏名・住所が不明</div>
+        <div class="ng-item-body">
+          氏名と住所の<strong>両方</strong>が必要です。氏名だけでは不可。<br>
+          口座振込は特に注意が必要で、振込人名義のみで住所が取れない場合はカウントできません。<br>
+          → 対策：住所記入欄付きの払込用紙・申込フォームを用意する。
+        </div>
+      </div>
+    </div>
+
+    <div class="ng-item">
+      <div class="ng-icon">🏢</div>
+      <div>
+        <div class="ng-item-title">役員（理事・監事）本人からの寄附</div>
+        <div class="ng-item-body">
+          法人の<strong>理事・監事</strong>は「役員」にあたり、寄附してもカウントできません。<br>
+          判断は<strong>寄附した時点</strong>で行います（就任前・退任後はカウント可）。<br>
+          ※ 職員（スタッフ）は役員ではないので、職員からの寄附はカウント可。
+        </div>
+      </div>
+    </div>
+
+    <div class="ng-item">
+      <div class="ng-icon">👨‍👩‍👧</div>
+      <div>
+        <div class="ng-item-title">役員と「生計を一にする者」からの寄附</div>
+        <div class="ng-item-body">
+          役員の配偶者・同居の家族・仕送り先の家族など、役員と日常生活費を共有している人からの寄附もカウントできません。<br>
+          姓と住所が役員と同じであれば、同一世帯として扱って差し支えありません。
+        </div>
+      </div>
+    </div>
+
+    <div class="ng-item">
+      <div class="ng-icon">💴</div>
+      <div>
+        <div class="ng-item-title">年間合計が3,000円未満</div>
+        <div class="ng-item-body">
+          同一人物が年度内に複数回寄附した場合は<strong>合算</strong>して判定します。<br>
+          また同一世帯（生計を一にする者）の寄附もまとめて合算した金額で判定します。<br>
+          合算後も3,000円に届かない場合はカウントできません。
+        </div>
+      </div>
+    </div>
+
+    <div class="ng-item">
+      <div class="ng-icon">🏛️</div>
+      <div>
+        <div class="ng-item-title">国・自治体・独立行政法人等からの補助金・委託費</div>
+        <div class="ng-item-body">
+          国、地方公共団体、独立行政法人、国際機関などからの<code>補助金</code>・<code>委託事業費</code>は寄附には該当しません。<br>
+          ※ <strong>民間</strong>の助成財団からの助成金は対価性がなければ寄附としてカウント可。
+        </div>
+      </div>
+    </div>
+
+    <div class="ng-item">
+      <div class="ng-icon">📋</div>
+      <div>
+        <div class="ng-item-title">正会員の会費</div>
+        <div class="ng-item-body">
+          正会員の会費は対価性があるものとして、寄附に該当しません。<br>
+          ただし<strong>賛助会費</strong>は、定款等から実質的に贈与と認められる場合（特典が機関誌配布程度など）はカウント可。
+        </div>
+      </div>
+    </div>
+
+    <div class="ng-item">
+      <div class="ng-icon">🎁</div>
+      <div>
+        <div class="ng-item-title">商業的価値のある特典・見返りがある寄附</div>
+        <div class="ng-item-body">
+          寄附者に商品券・商品・サービスなど<strong>商業的価値のある見返り</strong>を提供した場合は「対価性あり」とみなされ、寄附扱いできません。<br>
+          例：3,000円寄附で3,000円相当の商品券プレゼント → 購買と同じ扱い。
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /section 3 -->
+
+<!-- ===== SECTION 4: TIPS ===== -->
+<div class="section" id="tips">
+  <div class="section-label">
+    <div class="section-num">4</div>
+    <div class="section-title">実務上の注意点</div>
+  </div>
+  <div class="tips-grid">
+
+    <div class="tip-card">
+      <div class="tip-card-title">寄附者名簿の整備</div>
+      <div class="tip-card-body">
+        氏名・住所・寄附日・金額を記録した名簿を作成し、<strong>5年間保管</strong>が必要です。姓と住所が同じ人を同一世帯として集約しておくと、審査時の確認がスムーズです。
+      </div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-card-title">役員かどうかの判断タイミング</div>
+      <div class="tip-card-body">
+        「寄附をした時点」で役員かどうかを判断します。寄附後に就任した場合はカウント可、寄附後に退任した場合でも寄附時が役員ならカウント不可です。
+      </div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-card-title">口座振込の対策</div>
+      <div class="tip-card-body">
+        振込のみだと住所が取れずカウントできないケースが多いです。住所記入欄のある<strong>払込取扱票</strong>や<strong>オンライン申込フォーム</strong>を用意することで住所を取得できます。
+      </div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-card-title">年をまたいだ寄附のカウント</div>
+      <div class="tip-card-body">
+        同一人物が年度をまたいで寄附している場合、<strong>各事業年度ごとに</strong>カウントします。A年度で1件、B年度で1件 → 合計2件分として計上できます。
+      </div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-card-title">現物寄附の扱い</div>
+      <div class="tip-card-body">
+        物品の寄附は<strong>時価に換算</strong>して寄附金として計上できます。ただし経済的価値がない物品（時価ゼロ相当）は算入できません。ボランティアの労力は換算できません。
+      </div>
+    </div>
+
+    <div class="tip-card">
+      <div class="tip-card-title">更新時のPST基準変更</div>
+      <div class="tip-card-body">
+        認定更新の際、初回認定時と<strong>異なるPST基準に変更</strong>することは可能です。例：初回「相対値基準」→ 更新時「絶対値基準」への変更も認められます。
+      </div>
+    </div>
+
+  </div>
+</div><!-- /section 4 -->
+
+<!-- ===== SECTION 5: SEIKEI ===== -->
+<div class="section" id="seikei">
+  <div class="section-label">
+    <div class="section-num">5</div>
+    <div class="section-title">「生計を一にする者」について</div>
+  </div>
+
+  <div class="seikei-box">
+    <div class="seikei-box-title">⚠️ 基本の定義</div>
+    <div class="seikei-box-body">
+      「生計を一にする者」とは、<strong>日常生活の資（生活費・収入）を共通にしている人</strong>のことです。<br>
+      必ずしも同居していなくても該当し、別居でも仕送りなどで生活費を共有していれば「生計を一にする」とみなされます。
+    </div>
+  </div>
+
+  <div class="seikei-table-wrap">
+    <table class="seikei">
+      <thead>
+        <tr>
+          <th>関係</th>
+          <th>居住状況</th>
+          <th class="center" style="width:120px">生計を一にする？</th>
+          <th>備考</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>配偶者</td>
+          <td>同居</td>
+          <td class="center"><span class="badge ng">該当</span></td>
+          <td class="reason">一般的に生計を共にしている</td>
+        </tr>
+        <tr>
+          <td>子・親</td>
+          <td>同居</td>
+          <td class="center"><span class="badge ng">該当</span></td>
+          <td class="reason">同居で生活費共有</td>
+        </tr>
+        <tr>
+          <td>子（学生）</td>
+          <td>別居・仕送りあり</td>
+          <td class="center"><span class="badge ng">該当</span></td>
+          <td class="reason">仕送りで生活費を共通にしている</td>
+        </tr>
+        <tr>
+          <td>親</td>
+          <td>別居・生活費独立</td>
+          <td class="center"><span class="badge ok">非該当</span></td>
+          <td class="reason">各自で生計を立てている場合</td>
+        </tr>
+        <tr>
+          <td>兄弟姉妹</td>
+          <td>別居・生活費独立</td>
+          <td class="center"><span class="badge ok">非該当</span></td>
+          <td class="reason">各自で生計を立てている場合</td>
+        </tr>
+        <tr>
+          <td>友人・知人</td>
+          <td>別居</td>
+          <td class="center"><span class="badge ok">非該当</span></td>
+          <td class="reason">生活費は独立</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="timing-box">
+    <div class="timing-box-title">📌 判断のタイミングと実務上の目安</div>
+    <div class="timing-examples">
+      <div class="timing-ex">
+        <span class="label ok">実務目安</span>
+        <span class="desc">名簿上で<strong>姓と住所が同じ</strong>であれば、同一世帯（生計を一にする）として扱って差し支えない。</span>
+      </div>
+      <div class="timing-ex">
+        <span class="label ok">原則</span>
+        <span class="desc">生計を一にするかどうかは<strong>寄附をした時点</strong>の現況で判断。前後の生活状況も踏まえてよい。</span>
+      </div>
+      <div class="timing-ex">
+        <span class="label ng">注意</span>
+        <span class="desc">役員と生計を一にする者が寄附した場合は、その者の寄附も<strong>カウントできない</strong>（役員本人と同様に除外）。</span>
+      </div>
+      <div class="timing-ex">
+        <span class="label ok">一般寄附者の場合</span>
+        <span class="desc">一般寄附者どうしが生計を一にする場合は除外ではなく、<strong>合算して1人分</strong>としてカウントする。</span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /section 5 -->
+
+<div class="foot">
+  ※本資料は内閣府NPOホームページQ&amp;A（第45条1項1号）をもとに作成しました。詳細・最新情報は所轄庁または内閣府にご確認ください。
+</div>
+
+</div><!-- /card -->
+</div><!-- /wrap -->
+</body>
+</html>
