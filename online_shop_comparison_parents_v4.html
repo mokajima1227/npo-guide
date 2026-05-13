@@ -22,231 +22,66 @@ body {
   border: 0.5px solid #d3d1c7;
 }
 .header { margin-bottom: 2rem; }
-.header-title {
-  font-size: 22px;
-  font-weight: 500;
-  color: #1a1a18;
-  line-height: 1.4;
-  margin-bottom: 0.5rem;
-}
-.header-sub {
-  font-size: 14px;
-  color: #5f5e5a;
-  line-height: 1.6;
-}
-.section-title {
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  color: #888780;
-  text-transform: uppercase;
-  margin: 2rem 0 0.75rem;
-}
-.method-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 2rem;
-}
-@media (max-width: 560px) {
-  .method-grid { grid-template-columns: 1fr; }
-  .doc { padding: 1.5rem 1.25rem 2rem; }
-}
-.method-card {
-  background: #ffffff;
-  border: 0.5px solid #d3d1c7;
-  border-radius: 12px;
-  padding: 1.25rem;
-}
-.method-card.featured {
-  border: 2px solid #378add;
-}
-.method-badge {
-  display: inline-block;
-  font-size: 11px;
-  padding: 3px 10px;
-  border-radius: 8px;
-  margin-bottom: 0.75rem;
-  font-weight: 500;
-}
+.header-title { font-size: 22px; font-weight: 500; color: #1a1a18; line-height: 1.4; margin-bottom: 0.5rem; }
+.header-sub { font-size: 14px; color: #5f5e5a; line-height: 1.6; }
+.section-title { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; color: #888780; text-transform: uppercase; margin: 2rem 0 0.75rem; }
+.method-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 2rem; }
+@media (max-width: 560px) { .method-grid { grid-template-columns: 1fr; } .doc { padding: 1.5rem 1.25rem 2rem; } }
+.method-card { background: #ffffff; border: 0.5px solid #d3d1c7; border-radius: 12px; padding: 1.25rem; }
+.method-card.featured { border: 2px solid #378add; }
+.method-badge { display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 8px; margin-bottom: 0.75rem; font-weight: 500; }
 .badge-a { background: #e6f1fb; color: #185fa5; }
 .badge-b { background: #eaf3de; color: #3b6d11; }
-.method-name {
-  font-size: 15px;
-  font-weight: 500;
-  color: #1a1a18;
-  margin-bottom: 0.25rem;
-  line-height: 1.4;
-}
-.method-desc {
-  font-size: 13px;
-  color: #5f5e5a;
-  line-height: 1.6;
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 0.5px solid #d3d1c7;
-}
-.flow {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 1rem;
-  flex-wrap: wrap;
-}
-.flow-step {
-  font-size: 12px;
-  padding: 4px 10px;
-  border-radius: 20px;
-  border: 0.5px solid #b4b2a9;
-  color: #5f5e5a;
-  white-space: nowrap;
-}
+.method-name { font-size: 15px; font-weight: 500; color: #1a1a18; margin-bottom: 0.25rem; line-height: 1.4; }
+.method-desc { font-size: 13px; color: #5f5e5a; line-height: 1.6; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 0.5px solid #d3d1c7; }
+.flow { display: flex; align-items: center; gap: 6px; margin-bottom: 1rem; flex-wrap: wrap; }
+.flow-step { font-size: 12px; padding: 4px 10px; border-radius: 20px; border: 0.5px solid #b4b2a9; color: #5f5e5a; white-space: nowrap; }
 .flow-arrow { font-size: 12px; color: #888780; }
 .merit-list { list-style: none; margin-bottom: 0.75rem; }
-.merit-list li {
-  font-size: 13px;
-  color: #5f5e5a;
-  line-height: 1.6;
-  padding: 3px 0 3px 18px;
-  position: relative;
-}
-.merit-list li::before {
-  position: absolute;
-  left: 0;
-  font-size: 12px;
-  top: 5px;
-}
+.merit-list li { font-size: 13px; color: #5f5e5a; line-height: 1.6; padding: 3px 0 3px 18px; position: relative; }
+.merit-list li::before { position: absolute; left: 0; font-size: 12px; top: 5px; }
 .merit-list.pros li::before { content: "＋"; color: #3b6d11; }
 .merit-list.cons li::before { content: "−"; color: #a32d2d; }
-.list-label {
-  font-size: 11px;
-  font-weight: 500;
-  color: #888780;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin: 0.75rem 0 0.25rem;
-}
-.compare-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 2rem;
-  font-size: 13px;
-  table-layout: fixed;
-}
-.compare-table th {
-  font-weight: 500;
-  font-size: 12px;
-  padding: 10px 12px;
-  text-align: left;
-  background: #f1efe8;
-  color: #5f5e5a;
-  border-bottom: 0.5px solid #d3d1c7;
-}
-.compare-table th:first-child {
-  border-radius: 8px 0 0 0;
-  width: 28%;
-}
+.list-label { font-size: 11px; font-weight: 500; color: #888780; text-transform: uppercase; letter-spacing: 0.06em; margin: 0.75rem 0 0.25rem; }
+.compare-table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; font-size: 13px; table-layout: fixed; }
+.compare-table th { font-weight: 500; font-size: 12px; padding: 10px 12px; text-align: left; background: #f1efe8; color: #5f5e5a; border-bottom: 0.5px solid #d3d1c7; }
+.compare-table th:first-child { border-radius: 8px 0 0 0; width: 28%; }
 .compare-table th:last-child { border-radius: 0 8px 0 0; }
-.compare-table td {
-  padding: 10px 12px;
-  vertical-align: top;
-  border-bottom: 0.5px solid #d3d1c7;
-  color: #5f5e5a;
-  line-height: 1.6;
-}
-.compare-table td:first-child {
-  font-weight: 500;
-  color: #1a1a18;
-  font-size: 12px;
-}
+.compare-table td { padding: 10px 12px; vertical-align: top; border-bottom: 0.5px solid #d3d1c7; color: #5f5e5a; line-height: 1.6; }
+.compare-table td:first-child { font-weight: 500; color: #1a1a18; font-size: 12px; }
 .compare-table tr:last-child td { border-bottom: none; }
-.tag {
-  display: inline-block;
-  font-size: 11px;
-  padding: 2px 8px;
-  border-radius: 8px;
-  margin-right: 4px;
-  margin-bottom: 2px;
-}
+.tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 8px; margin-right: 4px; margin-bottom: 2px; }
 .tag-warn { background: #faeeda; color: #854f0b; }
-.tag-ok   { background: #eaf3de; color: #3b6d11; }
+.tag-ok { background: #eaf3de; color: #3b6d11; }
 .tag-info { background: #e6f1fb; color: #185fa5; }
 .tag-neutral { background: #f1efe8; color: #5f5e5a; }
-.summary-box {
-  background: #f1efe8;
-  border-radius: 12px;
-  padding: 1.25rem;
-  margin-bottom: 1rem;
-}
-.summary-box-title {
-  font-size: 13px;
-  font-weight: 500;
-  color: #1a1a18;
-  margin-bottom: 0.5rem;
-}
-.summary-box p {
-  font-size: 13px;
-  color: #5f5e5a;
-  line-height: 1.7;
-}
+.summary-box { background: #f1efe8; border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
+.summary-box-title { font-size: 13px; font-weight: 500; color: #1a1a18; margin-bottom: 0.5rem; }
+.summary-box p { font-size: 13px; color: #5f5e5a; line-height: 1.7; }
 .next-steps { margin-top: 0.5rem; }
-.step-row {
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-  padding: 10px 0;
-  border-bottom: 0.5px solid #d3d1c7;
-}
+.step-row { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-bottom: 0.5px solid #d3d1c7; }
 .step-row:last-child { border-bottom: none; }
-.step-num {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: #e6f1fb;
-  color: #185fa5;
-  font-size: 12px;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
+.step-num { width: 24px; height: 24px; border-radius: 50%; background: #e6f1fb; color: #185fa5; font-size: 12px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
 .step-body { flex: 1; }
-.step-title {
-  font-size: 13px;
-  font-weight: 500;
-  color: #1a1a18;
-  margin-bottom: 2px;
-}
-.step-desc {
-  font-size: 13px;
-  color: #5f5e5a;
-  line-height: 1.6;
-}
+.step-title { font-size: 13px; font-weight: 500; color: #1a1a18; margin-bottom: 2px; }
+.step-desc { font-size: 13px; color: #5f5e5a; line-height: 1.6; }
 </style>
 </head>
 <body>
 <div class="doc">
-
   <div class="header">
     <div class="header-title">オンラインショップ運営方法の<br>比較検討について</div>
     <div class="header-sub">お金チームでは、手仕事品・書籍・オンライン講座・オリジナルグッズ等の製造・販売を通じて学園の自主財源を強化することを検討しています。運営主体について2つの方法を比較し、皆さまのご意見をお聞きします。</div>
   </div>
-
   <div class="section-title">2つの方法の概要</div>
-
   <div class="method-grid">
-
     <div class="method-card">
       <span class="method-badge badge-a">方法 A</span>
       <div class="method-name">学園（認定NPO法人）が直接運営</div>
       <div class="method-desc">学園がオンラインショップの契約主体となり、収益事業として直接販売する</div>
       <div class="flow">
-        <span class="flow-step">販売</span>
-        <span class="flow-arrow">→</span>
-        <span class="flow-step">学園の収益事業収入</span>
-        <span class="flow-arrow">→</span>
+        <span class="flow-step">販売</span><span class="flow-arrow">→</span>
+        <span class="flow-step">学園の収益事業収入</span><span class="flow-arrow">→</span>
         <span class="flow-step">学園の活動費</span>
       </div>
       <div class="list-label">メリット</div>
@@ -264,16 +99,13 @@ body {
         <li>法人税の申告義務が発生</li>
       </ul>
     </div>
-
     <div class="method-card featured">
       <span class="method-badge badge-b">方法 B</span>
       <div class="method-name">父母の会を法人化して運営→寄附で学園へ</div>
       <div class="method-desc">父母の会を一般社団法人として法人化し、そちらでショップを運営。売上を学園へ寄附する</div>
       <div class="flow">
-        <span class="flow-step">販売</span>
-        <span class="flow-arrow">→</span>
-        <span class="flow-step">社団法人の収入</span>
-        <span class="flow-arrow">→</span>
+        <span class="flow-step">販売</span><span class="flow-arrow">→</span>
+        <span class="flow-step">社団法人の収入</span><span class="flow-arrow">→</span>
         <span class="flow-step">学園へ寄附</span>
       </div>
       <div class="list-label">メリット</div>
@@ -291,110 +123,39 @@ body {
         <li>社団法人側でも会計・税務申告が必要</li>
       </ul>
     </div>
-
   </div>
-
   <div class="section-title">詳細比較</div>
-
   <table class="compare-table">
     <thead>
-      <tr>
-        <th>比較項目</th>
-        <th>方法 A（学園が直接運営）</th>
-        <th>方法 B（父母の会法人化）</th>
-      </tr>
+      <tr><th>比較項目</th><th>方法 A（学園が直接運営）</th><th>方法 B（父母の会法人化）</th></tr>
     </thead>
     <tbody>
-      <tr>
-        <td>開始までの期間</td>
-        <td><span class="tag tag-warn">約3〜4ヶ月</span>定款変更認証が必要</td>
-        <td><span class="tag tag-warn">約2〜3ヶ月</span>社団法人設立登記が必要</td>
-      </tr>
-      <tr>
-        <td>初期費用</td>
-        <td><span class="tag tag-ok">ほぼ不要</span>手続き費用のみ</td>
-        <td><span class="tag tag-warn">10万円前後</span>登録免許税・公証費用</td>
-      </tr>
-      <tr>
-        <td>学園の会計負担</td>
-        <td><span class="tag tag-warn">増加</span>区分経理・法人税申告が追加</td>
-        <td><span class="tag tag-ok">最小限</span>寄附金収入として受領するだけ</td>
-      </tr>
-      <tr>
-        <td>節税効果</td>
-        <td><span class="tag tag-ok">大きい</span>みなし寄附金で課税所得を圧縮可能</td>
-        <td><span class="tag tag-info">小さい</span>社団法人にみなし寄附金制度なし</td>
-      </tr>
-      <tr>
-        <td>認定NPO法人への影響</td>
-        <td><span class="tag tag-warn">要注意</span>PST計算・収益比率に影響</td>
-        <td><span class="tag tag-ok">影響小</span>学園の収支構造を変えない</td>
-      </tr>
-      <tr>
-        <td>ブランド・信頼性</td>
-        <td><span class="tag tag-ok">高い</span>「愛知シュタイナー学園」として販売</td>
-        <td><span class="tag tag-neutral">工夫が必要</span>別法人名になるため連携明示が必要</td>
-      </tr>
-      <tr>
-        <td>法人税</td>
-        <td><span class="tag tag-neutral">収益事業に課税</span>みなし寄附金で軽減可</td>
-        <td><span class="tag tag-neutral">社団法人側に課税</span>非営利型要件の充足が必要</td>
-      </tr>
+      <tr><td>開始までの期間</td><td><span class="tag tag-warn">約3〜4ヶ月</span>定款変更認証が必要</td><td><span class="tag tag-warn">約2〜3ヶ月</span>社団法人設立登記が必要</td></tr>
+      <tr><td>初期費用</td><td><span class="tag tag-ok">ほぼ不要</span>手続き費用のみ</td><td><span class="tag tag-warn">10万円前後</span>登録免許税・公証費用</td></tr>
+      <tr><td>学園の会計負担</td><td><span class="tag tag-warn">増加</span>区分経理・法人税申告が追加</td><td><span class="tag tag-ok">最小限</span>寄附金収入として受領するだけ</td></tr>
+      <tr><td>節税効果</td><td><span class="tag tag-ok">大きい</span>みなし寄附金で課税所得を圧縮可能</td><td><span class="tag tag-info">小さい</span>社団法人にみなし寄附金制度なし</td></tr>
+      <tr><td>認定NPO法人への影響</td><td><span class="tag tag-warn">要注意</span>PST計算・収益比率に影響</td><td><span class="tag tag-ok">影響小</span>学園の収支構造を変えない</td></tr>
+      <tr><td>ブランド・信頼性</td><td><span class="tag tag-ok">高い</span>「愛知シュタイナー学園」として販売</td><td><span class="tag tag-neutral">工夫が必要</span>別法人名になるため連携明示が必要</td></tr>
+      <tr><td>法人税</td><td><span class="tag tag-neutral">収益事業に課税</span>みなし寄附金で軽減可</td><td><span class="tag tag-neutral">社団法人側に課税</span>非営利型要件の充足が必要</td></tr>
     </tbody>
   </table>
-
   <div class="section-title">検討のポイント</div>
-
   <div class="summary-box">
     <div class="summary-box-title">方法 A が向いている場合</div>
     <p>売上規模が大きくなることが見込まれる場合。みなし寄附金制度を最大限に活用でき、長期的には財政効率が高くなります。</p>
   </div>
-
   <div class="summary-box">
     <div class="summary-box-title">方法 B が向いている場合</div>
     <p>保護者が主体となって運営したい場合、または学園の認定NPO法人としての地位を守ることを最優先にしたい場合。シュタイナー教育が大切にする「保護者・教員・子どもの三者が学校を共に作る」文化とも合致します。</p>
   </div>
-
   <div class="section-title">今後の進め方（案）</div>
-
   <div class="next-steps">
-    <div class="step-row">
-      <div class="step-num">1</div>
-      <div class="step-body">
-        <div class="step-title">準備会での意見交換</div>
-        <div class="step-desc">どちらの方法が学園のビジョンや保護者の意向に合うか、準備会の場で皆さまのご意見をお聞きします。</div>
-      </div>
-    </div>
-    <div class="step-row">
-      <div class="step-num">2</div>
-      <div class="step-body">
-        <div class="step-title">全体会での運営方法の決定</div>
-        <div class="step-desc">準備会での意見を踏まえ、全体会において運営方法を決定します。</div>
-      </div>
-    </div>
-    <div class="step-row">
-      <div class="step-num">3</div>
-      <div class="step-body">
-        <div class="step-title">方法 A の場合：定款変更の議決（総会）</div>
-        <div class="step-desc">総会での議決後、愛知県へ定款変更認証を申請します。認証後（約2〜3ヶ月）にオンラインショップを稼働します。</div>
-      </div>
-    </div>
-    <div class="step-row">
-      <div class="step-num">3</div>
-      <div class="step-body">
-        <div class="step-title">方法 B の場合：父母の会の法人化準備</div>
-        <div class="step-desc">一般社団法人の設立に向けた準備委員会を立ち上げ、役員候補・定款案を検討します。</div>
-      </div>
-    </div>
-    <div class="step-row">
-      <div class="step-num">4</div>
-      <div class="step-body">
-        <div class="step-title">オンラインショップ稼働</div>
-        <div class="step-desc">いずれの方法でも、2026年秋〜冬の稼働を目標とします。</div>
-      </div>
-    </div>
+    <div class="step-row"><div class="step-num">1</div><div class="step-body"><div class="step-title">準備会での意見交換</div><div class="step-desc">どちらの方法が学園のビジョンや保護者の意向に合うか、準備会の場で皆さまのご意見をお聞きします。</div></div></div>
+    <div class="step-row"><div class="step-num">2</div><div class="step-body"><div class="step-title">全体会での運営方法の決定</div><div class="step-desc">準備会での意見を踏まえ、全体会において運営方法を決定します。</div></div></div>
+    <div class="step-row"><div class="step-num">3</div><div class="step-body"><div class="step-title">方法 A の場合：定款変更の議決（総会）</div><div class="step-desc">総会での議決後、愛知県へ定款変更認証を申請します。認証後（約2〜3ヶ月）にオンラインショップを稼働します。</div></div></div>
+    <div class="step-row"><div class="step-num">3</div><div class="step-body"><div class="step-title">方法 B の場合：父母の会の法人化準備</div><div class="step-desc">一般社団法人の設立に向けた準備委員会を立ち上げ、役員候補・定款案を検討します。</div></div></div>
+    <div class="step-row"><div class="step-num">4</div><div class="step-body"><div class="step-title">オンラインショップ稼働</div><div class="step-desc">いずれの方法でも、2026年秋〜冬の稼働を目標とします。</div></div></div>
   </div>
-
 </div>
 </body>
 </html>
